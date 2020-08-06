@@ -20,22 +20,27 @@ import org.videolan.libvlc.MediaPlayer;
 
 import java.util.Arrays;
 
-public class CameraMonitorActivity extends AppCompatActivity implements VlcListener {
+public class CameraMonitorActivity extends AppCompatActivity implements VlcListener, View.OnClickListener {
     private VlcVideoLibrary vlcVideoLibrary;
 
     private SurfaceView surfaceView;
     private TextView bufferingTxt;
+    private Button btnRecording;
 
     String sampleRTSP = "rtsp://192.168.105.39:1935/vod/sample.mp4";
     Handler handler;
+    Boolean bRecording = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_monitor);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        surfaceView = (SurfaceView) findViewById(R.id.surface_monitor_camera);
-        bufferingTxt = (TextView) findViewById(R.id.buffering_txt);
+        surfaceView = (SurfaceView) findViewById(R.id.surface_monitor_player);
+        bufferingTxt = (TextView) findViewById(R.id.textview_monitor_loading);
+        btnRecording = (Button) findViewById(R.id.btn_monitor_recording);
+
+        btnRecording.setOnClickListener(this);
 
         initPlayer();
 
@@ -79,4 +84,19 @@ public class CameraMonitorActivity extends AppCompatActivity implements VlcListe
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_monitor_recording:
+                if(bRecording) {
+                    btnRecording.setText(getResources().getString(R.string.start_record));
+                } else {
+                    btnRecording.setText(getResources().getString(R.string.stop_record));
+                }
+                bRecording = !bRecording;
+                break;
+            default:
+                break;
+        }
+    }
 }

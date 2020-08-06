@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MY Camera</string>
+    <string name="start_record">Start Record</string>
+    <string name="stop_record">Stop Record</string>
 </resources>

@@ -1,2 +1,4 @@
+include ':libvlc-debug'
+include ':pedrovlc-debug'
 include ':app'
 rootProject.name = "MY Camera"

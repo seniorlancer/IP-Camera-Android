@@ -1,0 +1,2 @@
+org.videolan.libvlc
+string app_name

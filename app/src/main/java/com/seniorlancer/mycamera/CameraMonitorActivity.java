@@ -3,6 +3,7 @@ package com.seniorlancer.mycamera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,15 +21,16 @@ import org.videolan.libvlc.MediaPlayer;
 
 import java.util.Arrays;
 
-public class CameraMonitorActivity extends AppCompatActivity implements VlcListener, View.OnClickListener {
+public class CameraMonitorActivity extends AppCompatActivity implements VlcListener, View.OnClickListener, SurfaceHolder.Callback {
     private VlcVideoLibrary vlcVideoLibrary;
 
     private SurfaceView surfaceView;
     private TextView bufferingTxt;
     private Button btnRecording;
 
+    private SurfaceHolder surfaceHolder;
+
     String sampleRTSP = "rtsp://192.168.105.39:1935/vod/sample.mp4";
-    Handler handler;
     Boolean bRecording = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,18 +42,13 @@ public class CameraMonitorActivity extends AppCompatActivity implements VlcListe
         bufferingTxt = (TextView) findViewById(R.id.textview_monitor_loading);
         btnRecording = (Button) findViewById(R.id.btn_monitor_recording);
 
+        surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
         btnRecording.setOnClickListener(this);
 
         initPlayer();
-
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                vlcVideoLibrary.play(sampleRTSP);
-            }
-        }, 100);
-
     }
 
     @Override
@@ -98,5 +95,20 @@ public class CameraMonitorActivity extends AppCompatActivity implements VlcListe
             default:
                 break;
         }
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        vlcVideoLibrary.play(sampleRTSP);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
     }
 }
